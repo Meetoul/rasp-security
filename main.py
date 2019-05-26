@@ -5,17 +5,21 @@ GpioConfig.init()
 
 from gpio_subscription import GpioSubscription
 from telegram import Telegram
+from camera import Camera
 
 def msg_handler(message):
     print(message)
 
 subscribtion = GpioSubscription()
+camera = Camera()
+
 tg = Telegram(msg_handler)
 
 def telegram_listener(area):
     text = 'There is an intruder in %s' % area
     print(text)
-    tg.send_all(text)
+    image = camera.capture()
+    tg.send_all_image(text, image)
 
 def main():
 

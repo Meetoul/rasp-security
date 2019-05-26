@@ -40,3 +40,9 @@ class Telegram:
     def send_all(self, text):
         for chat_id in self.m_chat_ids:
             self.m_bot.sendMessage(chat_id, text)
+
+    def send_all_image(self, text, image):
+        with open(image, 'rb') as raw_image:
+            for chat_id in self.m_chat_ids:
+                self.m_bot.sendMessage(chat_id, text)
+                self.m_bot.sendPhoto(chat_id, raw_image)
