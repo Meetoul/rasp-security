@@ -8,6 +8,7 @@ fi
 INSTALLED_PACKAGES="$(pip3 freeze)"
 REQUIREMENTS_FILE="requirements.txt"
 
+not_satisfied=false
 grep -v "^#" ${REQUIREMENTS_FILE} | while read pkg; do
     echo "${INSTALLED_PACKAGES}" | grep "${pkg}" > /dev/null 2>&1
     if ! [ $? -eq 0 ]; then
@@ -46,3 +47,5 @@ echo "Creating directory ${LOGS_DIR} for log records"
 mkdir -p "${LOGS_DIR}"
 echo "Creating directory ${RECORDS_DIR} for webcam records"
 mkdir -p "${RECORDS_DIR}"
+
+ffserver &
