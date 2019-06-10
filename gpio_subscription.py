@@ -27,10 +27,12 @@ class TimeoutedCallback:
 class GpioSubscription:
 
     def __init__(self):
-        GPIO.setmode(GPIO.BCM)
+        self.m_enabled = False
 
         self.m_listeners = {}
         self.m_detection_timepoints = {}
+
+        GPIO.setmode(GPIO.BCM)
 
         for gpio_num in GpioConfig.get_gpios():
             GPIO.setup(gpio_num, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -40,6 +42,8 @@ class GpioSubscription:
             self.m_listeners[gpio_num] = []
             self.m_detection_timepoints[gpio_num] = timer()
 
+    def set_enabled(self, enabled):
+        self.m_enabled = enabled
 
     def subscribe(self, gpio, listener):
         self.m_listeners[gpio].append(TimeoutedCallback(listener))
@@ -54,8 +58,9 @@ class GpioSubscription:
                 listeners.remove(listener)
 
     def __call__(self, param):
-        listeners = self.m_listeners[param]
-        area = GpioConfig.gpio_to_area(param)
+        if self.m_enabled:
+            listeners = self.m_listeners[param]
+            area = GpioConfig.gpio_to_area(param)
 
-        for listener in listeners:
-            listener(area)
+            for listener in listeners:
+                listener(area)

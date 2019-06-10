@@ -48,4 +48,4 @@ mkdir -p "${LOGS_DIR}"
 echo "Creating directory ${RECORDS_DIR} for webcam records"
 mkdir -p "${RECORDS_DIR}"
 
-ffserver &
+ffserver -f ffserv.conf &

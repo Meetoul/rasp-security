@@ -15,15 +15,16 @@ CAPTURE_SHELL_COMMAND = 'ffmpeg -f video4linux2 \
  -frames 1 \
  {}'
 
-RECORD_SHELL_COMMAND = 'timeout {} ffmpeg -f video4linux2 \
- -i {} \
- -s 640x480 \
- -r 15 \
+RECORD_SHELL_COMMAND = 'ffmpeg -f video4linux2 -i {0}  -s 640x480 -r 15 \
  -vcodec h264 \
  -codec copy \
  -an \
- http://0.0.0.0:{}/camera.ffm \
- {}'
+ -t {1} \
+ http://0.0.0.0:{2}/camera.ffm \
+ -vcodec h264 \
+ -an \
+ -t {1} \
+ {3}'
 
 class Camera:
 
@@ -47,7 +48,7 @@ class Camera:
         LOGI('Camera stream started')
         record_filename = os.path.join(RECORDS_DIR, self.__gen_timestamp_filename('record.mpeg'))
         LOGI('Saving camera record to file %s' % record_filename)
-        subprocess.run(RECORD_SHELL_COMMAND.format(RECORD_DURATION, self.m_camera, STREAM_PORT, record_filename), shell=True)
+        subprocess.run(RECORD_SHELL_COMMAND.format(self.m_camera, RECORD_DURATION, STREAM_PORT, record_filename), shell=True)
 
     def __on_stream_finished(self, _):
         LOGI('Camera stream finished')
