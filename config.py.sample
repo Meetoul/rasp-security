@@ -4,6 +4,17 @@ RECORDS_DIR = 'records'
 LOGS_DIR = 'logs'
 
 CAMERA_DEVICE = '/dev/video0'
+RECORD_DURATION = '00:00:10'
+
+CAMERA_DEVICE = '/dev/video0'
+STREAM_PORT = '8099' # NOTE: port should be aligned with value if ffserv.conf
+
+GSM_SERIAL = '/dev/ttyAMA0'
+SMS_CENTER_NUMBER = '+38050000501' # Vodafone SMS center
+
+SMS_NUMBERS = [
+    '+380500000000',
+]
 
 DETECTION_TIMEOUT = 5 # s
 TELEGRAM_BOT_TOKEN = '111111111:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'

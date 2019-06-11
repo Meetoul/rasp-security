@@ -3,9 +3,10 @@ import serial
 import RPi.GPIO as GPIO
 
 class AtSerial:
-    def __init__(self, dev):
+    def __init__(self, dev, serv):
         self.port = serial.Serial(dev, baudrate=115200, timeout=1)
         self.sms_text_mode = False
+        self.serv = serv
 
     # Check if module is ready to receive AT commands
     def at_ready(self):
@@ -24,14 +25,14 @@ class AtSerial:
         self.write_serial('AT+CMGF=1')
         rcv = self.read_serial()
         self.sms_text_mode = True
-        return rvc
+        return rcv
 
     # Send SMS to a specific number through specific SMS-server
-    def send_sms(serv, num, text):
+    def send_sms(self, num, text):
         if not self.sms_text_mode:
             self.set_sms_mode_text()
 
-        self.write_serial('AT+CSCA="{}"'.format(serv))
+        self.write_serial('AT+CSCA="{}"'.format(self.serv))
         rcv = self.read_serial()
         self.write_serial('AT+CMGS="{}"'.format(num))
         rcv = self.read_serial()
